@@ -1,0 +1,290 @@
+{
+  "dns": {
+    "servers": [
+      "https://1.1.1.1/dns-query",
+      "https://8.8.8.8/dns-query"
+    ],
+    "queryStrategy": "UseIP"
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "connIdle": 3600,
+        "handshake": 8,
+        "uplinkOnly": 0,
+        "downlinkOnly": 0,
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      },
+      "8": {
+        "connIdle": 3600,
+        "handshake": 8,
+        "uplinkOnly": 0,
+        "downlinkOnly": 0
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsOutboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "balancerTag": "LteBalancer"
+      }
+    ],
+    "balancers": [
+      {
+        "tag": "LteBalancer",
+        "selector": [
+          "proxy"
+        ],
+        "strategy": {
+          "type": "leastLoad",
+          "settings": {
+            "maxRTT": "5s",
+            "expected": 2,
+            "baselines": [
+              "500ms",
+              "1s"
+            ],
+            "tolerance": 0.2
+          }
+        },
+        "fallbackTag": "direct"
+      }
+    ],
+    "domainMatcher": "hybrid",
+    "domainStrategy": "IPIfNonMatch"
+  },
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": true,
+        "auth": "noauth"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": false,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      }
+    },
+    {
+      "tag": "http",
+      "port": 10809,
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "settings": {
+        "allowTransparent": false,
+        "auth": "noauth"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": false,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "proxy",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "217.16.27.113",
+            "port": 443,
+            "users": [
+              {
+                "id": "ee7f818e-2260-496e-923c-e69e6b6659d3",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "eh.vk.com",
+          "publicKey": "AiG06E-jizo9xtBbulKQvdQqhZfobZJBTQIKkaDjaiU",
+          "shortId": "a1b2c3d4e5",
+          "fingerprint": "chrome"
+        },
+        "sockopt": {
+          "tcpNoDelay": true,
+          "tcpUserTimeout": 15000,
+          "tcpKeepAliveIdle": 45,
+          "acceptProxyProtocol": true,
+          "tcpKeepAliveInterval": 45
+        }
+      }
+    },
+    {
+      "tag": "proxy-2",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "217.16.27.113",
+            "port": 443,
+            "users": [
+              {
+                "id": "ee7f818e-2260-496e-923c-e69e6b6659d3",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "max.ru",
+          "publicKey": "AiG06E-jizo9xtBbulKQvdQqhZfobZJBTQIKkaDjaiU",
+          "shortId": "a1b2c3d4e5",
+          "fingerprint": "chrome"
+        },
+        "sockopt": {
+          "tcpNoDelay": true,
+          "tcpUserTimeout": 15000,
+          "tcpKeepAliveIdle": 45,
+          "acceptProxyProtocol": true,
+          "tcpKeepAliveInterval": 45
+        }
+      }
+    },
+    {
+      "tag": "proxy-3",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "217.16.27.113",
+            "port": 443,
+            "users": [
+              {
+                "id": "ee7f818e-2260-496e-923c-e69e6b6659d3",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "io.ozone.ru",
+          "publicKey": "AiG06E-jizo9xtBbulKQvdQqhZfobZJBTQIKkaDjaiU",
+          "shortId": "a1b2c3d4e5",
+          "fingerprint": "chrome"
+        },
+        "sockopt": {
+          "tcpNoDelay": true,
+          "tcpUserTimeout": 15000,
+          "tcpKeepAliveIdle": 45,
+          "acceptProxyProtocol": true,
+          "tcpKeepAliveInterval": 45
+        }
+      }
+    },
+    {
+      "tag": "proxy-4",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "217.16.27.113",
+            "port": 443,
+            "users": [
+              {
+                "id": "ee7f818e-2260-496e-923c-e69e6b6659d3",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "5post-gate.x5.ru",
+          "publicKey": "AiG06E-jizo9xtBbulKQvdQqhZfobZJBTQIKkaDjaiU",
+          "shortId": "a1b2c3d4e5",
+          "fingerprint": "chrome"
+        },
+        "sockopt": {
+          "tcpNoDelay": true,
+          "tcpUserTimeout": 15000,
+          "tcpKeepAliveIdle": 45,
+          "acceptProxyProtocol": true,
+          "tcpKeepAliveInterval": 45
+        }
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole"
+    }
+  ],
+  "burstObservatory": {
+    "pingConfig": {
+      "timeout": "3s",
+      "interval": "30s",
+      "sampling": 2,
+      "destination": "http://www.gstatic.com/generate_204",
+      "connectivity": ""
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  },
+  "remarks": "🇪🇺 Обход — Автовыбор",
+  "meta": {
+    "serverDescription": "Моб. интернет"
+  },
+  "log": {
+    "access": "/storage/emulated/0/Android/data/com.happproxy/files/assets/logs/access/access_log.txt",
+    "error": "/storage/emulated/0/Android/data/com.happproxy/files/assets/logs/error/1778133503519_error_log.txt"
+  }
+}
